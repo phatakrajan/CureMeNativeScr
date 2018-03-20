@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "57297437575",
+    "firebase_url": "https://cureme-native.firebaseio.com",
+    "project_id": "cureme-native",
+    "storage_bucket": "cureme-native.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57297437575:android:a0f6c640ed7781cc",
+        "android_client_info": {
+          "package_name": "com.nativescr.cureme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57297437575-b4jrrl0qajfhimuv7t94b0c6q3fsfv1v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBbbXc2dQtvmJiNItTb2h7FNXmXnkdnww"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
