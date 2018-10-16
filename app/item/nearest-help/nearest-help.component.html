@@ -1,0 +1,36 @@
+<ActionBar class="action-bar">
+    <StackLayout orientation="horizontal" ios:horizontalAlignment="left" android:horizontalAlignment="left">
+        <Label class="mdi icon back" [text]="'mdi-keyboard-arrow-left' | fonticon" horizontalAlignment="center" verticalAlignment="center"></Label>
+        <Image src="res://store_logo" class="action-image"></Image>
+        <Label [text]="subItem.name" class="action-label"></Label>
+    </StackLayout>
+</ActionBar>
+<GridLayout class="page" rows="auto,*">
+    <DropDown #dd [items]="itemSource" [(ngModel)]="selectedIndex" (selectedIndexChanged)="onchange($event)" class="place-drop-down"
+        hint="Select Place" verticalAlignment="center" row="0" col="0"></DropDown>
+    <MapView #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [minZoom]="minZoom" [maxZoom]="maxZoom" [bearing]="bearing"
+        (mapReady)="onMapReady($event)" (markerSelect)="onMarkerSelect($event)" [tilt]="tilt" i-padding="50,50,50,50" [padding]="padding"
+        row="1" col="0">
+    </MapView>
+    <!-- <GridLayout rows="auto,auto,auto">
+        <Label [text]="placeDetails[selectedIndex]?.result.name" row="0" col="0"></Label>
+        <Label [text]="placeDetails[selectedIndex]?.result.formatted_address" row="1" col="0"></Label>
+        <GridLayout columns="auto, *" row="2" col="0">
+            <Label class="mdi icon phone" [text]="mdi-phone" row="0" col="0"></Label>
+            <Labels [text]="placeDetails[selectedIndex]?.result.international_phone_number" row="0" col="1"></Label>
+        </GridLayout>        
+    </GridLayout> -->
+    <!-- <GridLayout columns="auto,*,auto" row="1" col="0" *ngIf="placeDetails && selectedIndex != null">
+        <Label class="mdi icon dateChangeBtn m-y-10" row="0" col="0" [text]="'mdi-keyboard-arrow-left' | fonticon" horizontalAlignment="center"
+            verticalAlignment="center" (tap)="decrementIndex()"></Label>
+        <GridLayout rows="auto,auto" row="0" col="1">
+            <Label class="address" [text]="placeDetails[selectedIndex]?.result.formatted_address" textWrap="true" row="0" col="0"></Label>
+            <GridLayout columns="auto, auto" row="1" col="0">
+                <Label class="mdi icon phone" [text]="mdi-phone" row="0" col="0"></Label>
+                <Label [text]="placeDetails[selectedIndex]?.result.international_phone_number" textWrap="true" row="0" col="1"></Label>
+            </GridLayout>
+        </GridLayout>
+        <Label class="mdi icon dateChangeBtn m-y-10" row="0" col="2" [text]="'mdi-keyboard-arrow-right' | fonticon" horizontalAlignment="center"
+            verticalAlignment="center" (tap)="incrementIndex()"></Label>
+    </GridLayout> -->
+</GridLayout>

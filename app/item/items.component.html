@@ -10,7 +10,11 @@ So you can still use template expressions, bindings, templates as well as all th
 The ActionBar is the NativeScript common abstraction over the Android ActionBar and iOS NavigationBar.
 http://docs.nativescript.org/ui/action-bar
 -->
-<ActionBar title="My App" class="action-bar">
+<ActionBar class="action-bar">
+    <StackLayout orientation="horizontal" ios:horizontalAlignment="center" android:horizontalAlignment="left">
+        <Image src="res://store_logo" class="action-image"></Image>
+        <Label text="Cure Me" class="action-label"></Label>
+    </StackLayout>
 </ActionBar>
 
 <!--
@@ -24,10 +28,14 @@ core theme, such as p-20, btn, h2, and list-group. You can view a full list of t
 class names available for styling your app at https://docs.nativescript.org/ui/theme.
 -->
 <StackLayout class="page">
-    <ListView [items]="items" class="list-group">
-        <ng-template let-item="item">
-            <Label [nsRouterLink]="['/item', item.id]" [text]="item.name"
-                class="list-group-item"></Label>
-        </ng-template>
-    </ListView>
+    <GridLayout rows="*,40">
+        <ListView [items]="items" class="list-group">
+                <ng-template let-item="item" let-i="index">
+                    <GridLayout columns="1*, 3*" [nsRouterLink]="['/item', item.id]">
+                        <Image [src]="item.path" stretch="aspectFit" height=60 width=60 margin=10 col="0" [row]="i"></Image>
+                        <Label [text]="item.name" class="list-group-item" verticalAlignment="center" col="1" [row]="i"></Label>
+                    </GridLayout>
+                </ng-template>
+            </ListView>
+    </GridLayout>    
 </StackLayout>

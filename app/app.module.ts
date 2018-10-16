@@ -1,18 +1,29 @@
+import { SubItemComponent } from '~/item/subitem/subitem.component';
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { AppRoutingModule } from "./app.routing";
-import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "~/app.routing";
+import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
+import { AppComponent } from "~/app.component";
 
-import { ItemService } from "./item/item.service";
-import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
-import { FirebaseService } from "./app.firebase.service";
+import { ItemService } from "~/item/item.service";
+import { ItemsComponent } from "~/item/items.component";
+import { FirebaseService } from '~/services/firebase.service';
+import { GpsLocationService } from '~/services/gpsLocation.service';
+import { NearestHelpComponent } from '~/item/nearest-help/nearest-help.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DropDownModule } from "nativescript-drop-down/angular";
+import { SubitemDetailsComponent } from '~/item/subitem/subitem-details/subitem-details.component';
+import { TipOfDayComponent } from '~/item/tip-of-day/tip-of-day.component';
+
+declare var android: any;
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpModule } from "nativescript-angular/http";
+import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+import { ItemsGuard } from '~/item/items.guard';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
     bootstrap: [
@@ -20,16 +31,27 @@ import { FirebaseService } from "./app.firebase.service";
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NativeScriptHttpClientModule,
+        DropDownModule,
+        TNSFontIconModule.forRoot({
+            'mdi': 'material-design-icons.css'
+        })    
     ],
     declarations: [
         AppComponent,
         ItemsComponent,
-        ItemDetailComponent
+        SubItemComponent,
+        SubitemDetailsComponent,
+        NearestHelpComponent,
+        TipOfDayComponent
     ],
     providers: [
         ItemService,
-        FirebaseService
+        FirebaseService,
+        GpsLocationService,
+        ItemsGuard,
+        DatePipe
     ],
     schemas: [
         NO_ERRORS_SCHEMA
@@ -38,4 +60,10 @@ import { FirebaseService } from "./app.firebase.service";
 /*
 Pass your application module to the bootstrapModule function located in main.ts to start your app
 */
-export class AppModule { }
+export class AppModule {
+    constructor(
+        private firebaseService: FirebaseService
+    ){
+        this.firebaseService.init();
+    }
+ }

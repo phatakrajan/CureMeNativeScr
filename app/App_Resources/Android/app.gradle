@@ -8,12 +8,13 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "com.nativescr.cureme"  
+    multiDexEnabled true
+    applicationId = "com.nativescript.cureme"  
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
-  }  
+  } 
   project.ext {
-    googlePlayServicesVersion = "11.0.+"
+    googlePlayServicesVersion = "15.0.1"
   }
 } 

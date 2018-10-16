@@ -1,0 +1,21 @@
+<ActionBar class="action-bar">
+    <StackLayout orientation="horizontal" ios:horizontalAlignment="left" android:horizontalAlignment="left">
+        <Label class="mdi icon back" [text]="'mdi-keyboard-arrow-left' | fonticon" horizontalAlignment="center" verticalAlignment="center"></Label>
+        <Image src="res://store_logo" class="action-image"></Image>
+        <Label [text]="item.name" class="action-label"></Label>
+    </StackLayout>
+</ActionBar>
+<StackLayout class="page">
+    <GridLayout rows="*,40">
+        <TabView #tab row="0" col="0" class="tabSubItem" selectedColor="black" [selectedIndex]="selectedIndex"  (selectedIndexChange)="onIndexChanged($event)">
+            <ng-template ngFor let-subitem [ngForOf]="item.subitems" let-i="index">
+                <StackLayout *tabItem="{title: subitem.name}">
+                    <GridView rows="auto,*">
+                        <Image [src]="item.subitems[i].path" stretch="aspectFit" height="100" width="100" margin="10" col="0" row="0"></Image>
+                        <WebView #webView col="0" row="1" [path]="subitem.description"></WebView>
+                    </GridView>
+                </StackLayout>
+            </ng-template>
+        </TabView>
+    </GridLayout>
+</StackLayout>

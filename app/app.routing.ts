@@ -2,13 +2,20 @@ import { NgModule } from "@angular/core";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Routes } from "@angular/router";
 
-import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
+import { ItemsComponent } from "~/item/items.component";
+import { SubItemComponent } from "~/item/subitem/subitem.component";
+import { NearestHelpComponent } from "~/item/nearest-help/nearest-help.component";
+import { SubitemDetailsComponent } from "~/item/subitem/subitem-details/subitem-details.component";
+import { TipOfDayComponent } from "~/item/tip-of-day/tip-of-day.component";
+import { ItemsGuard } from "~/item/items.guard";
 
 const routes: Routes = [
     { path: "", redirectTo: "/items", pathMatch: "full" },
-    { path: "items", component: ItemsComponent },
-    { path: "item/:id", component: ItemDetailComponent },
+    { path: "items", component: ItemsComponent, canActivate: [ItemsGuard] },
+    { path: "item/:id", component: SubItemComponent },
+    { path: "itemdetails/:id/:subitemid", component: SubitemDetailsComponent },
+    { path: "nearesthelp/:id/:subitemid", component: NearestHelpComponent },
+    { path: "tip-of-day", component: TipOfDayComponent}
 ];
 
 @NgModule({

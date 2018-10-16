@@ -1,0 +1,21 @@
+.dateChangeBtn{
+    color: #039be5;
+    font-size: 20;
+}
+
+.place-drop-down {
+    padding: 10;
+    font-size: 20;
+    color: #009688;
+    text-align: left;
+    width: 100%;
+}
+
+.address {
+    font-size: 19;
+    color: #6495ed;
+}
+
+.phone {
+    font-size: 26;
+}

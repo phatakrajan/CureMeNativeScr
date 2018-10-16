@@ -1,5 +1,7 @@
 export interface Item {
     id: number;
     name: string;
-    role: string;
+    path: string;
+    subitems?: Array<Item>;
+    description?: string;
 }

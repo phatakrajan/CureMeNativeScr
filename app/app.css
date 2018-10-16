@@ -10,3 +10,37 @@ of writing your own CSS rules. For a full list of class names in the theme
 refer to http://docs.nativescript.org/ui/theme.
 */
 @import '~nativescript-theme-core/css/core.light.css';
+
+.mdi {
+    font-family: "Material Icons", "MaterialIcons-Regular";
+}
+
+.page {
+    background-image: url("~/images/background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+ActionBar.action-bar {
+    background-color: #1d6976;
+}
+
+.action-image {
+    width: 40;
+    height: 40;
+    vertical-align: center; 
+}
+
+.action-label {
+    color: #ffffff;
+    font-size: 22;
+    vertical-align: center;
+    margin-left: 10;
+}
+
+.back{
+    color: #ffffff;
+    font-size: 26;
+    margin-left: -10;
+}

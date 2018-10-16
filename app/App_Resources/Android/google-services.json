@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57297437575:android:a0f6c640ed7781cc",
+        "mobilesdk_app_id": "1:57297437575:android:4766a5879a85c51d",
         "android_client_info": {
-          "package_name": "com.nativescr.cureme"
+          "package_name": "com.nativescript.cureme"
         }
       },
       "oauth_client": [
@@ -35,7 +35,8 @@
         "ads_service": {
           "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-7848962688204458~7487092413"
     }
   ],
   "configuration_version": "1"
