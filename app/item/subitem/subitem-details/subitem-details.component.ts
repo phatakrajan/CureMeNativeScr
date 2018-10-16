@@ -7,7 +7,7 @@ let webViewInterfaceModule = require('nativescript-webview-interface');
 import { WebView, LoadEventData } from "ui/web-view";
 import { EventData } from 'ui/page';
 import * as fs from "file-system";
-import {isIOS, isAndroid} from "platform";
+import { isIOS, isAndroid } from "platform";
 import { TabView } from 'ui/tab-view';
 
 declare var UIColor: any;
@@ -58,14 +58,14 @@ export class SubitemDetailsComponent implements OnInit, AfterViewInit {
 			let iWebView = new webViewInterfaceModule.WebViewInterface(webView, '~/www/index.html');
 
 			webView.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
-				if(isAndroid){
+				if (isAndroid) {
 					webView.android.setBackgroundColor(android.graphics.Color.TRANSPARENT);//
 					webView.android.setLayerType(0x00000001, null);
 					webView.android.getSettings().setBuiltInZoomControls(false);
 				}
-				if(isIOS){
+				if (isIOS) {
 					webView.ios.backgroundColor = UIColor.clearColor();
-					webView.ios.opaque=false;
+					webView.ios.opaque = false;
 				}
 				let appFolder = fs.knownFolders.currentApp();
 				let file = appFolder.getFile(path);
@@ -87,7 +87,7 @@ export class SubitemDetailsComponent implements OnInit, AfterViewInit {
 	}
 	onIndexChanged(args: EventData) {
 		let tabView = <TabView>args.object;
-		this.subItem = this.item.subitems.filter(item => item.id === (tabView.selectedIndex-1))[0];
+		this.subItem = this.item.subitems.filter(item => item.id === (tabView.selectedIndex - 1))[0];
 	}
 
 }

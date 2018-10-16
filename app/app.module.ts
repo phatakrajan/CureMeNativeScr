@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DropDownModule } from "nativescript-drop-down/angular";
 import { SubitemDetailsComponent } from '~/item/subitem/subitem-details/subitem-details.component';
 import { TipOfDayComponent } from '~/item/tip-of-day/tip-of-day.component';
+import * as platform from "platform";
+declare var GMSServices: any;
 
 declare var android: any;
 
@@ -65,5 +67,8 @@ export class AppModule {
         private firebaseService: FirebaseService
     ){
         this.firebaseService.init();
+        if (platform.isIOS) { 
+            GMSServices.provideAPIKey("AIzaSyAniSIURuF9QC_KR6nLcNbWNQzkSn0evlE");
+          }
     }
  }
