@@ -13,3 +13,5 @@ tmp/
 typings/
 report/
 test-results.xml
+!app/www/*
+!app/www/**/*
