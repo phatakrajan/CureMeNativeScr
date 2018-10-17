@@ -34,10 +34,14 @@ export class SubItemComponent implements OnInit, AfterViewInit {
     onNavigate(itemId: number, subItemId: number){
         if(itemId === ItemName.SELF_CURE || itemId === ItemName.FIRST_AID || 
             itemId === ItemName.SEASONAL_PROBLEM || itemId === ItemName.GRANNY_TIPS){
-                this.router.navigate(['/itemdetails',itemId, subItemId]);
+                this.router.navigate(['itemdetails',itemId, subItemId]);
         } else if (itemId === ItemName.NEAREST_HELP){
-            this.router.navigate(['/nearesthelp',itemId, subItemId]);
+            this.router.navigate(['nearesthelp',itemId, subItemId]);
         }
         
     }
+
+	goBack(){
+		this.router.back();
+	}
 }

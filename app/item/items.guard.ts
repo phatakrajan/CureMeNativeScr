@@ -14,7 +14,7 @@ export class ItemsGuard implements CanActivate {
     }
     canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot): boolean | Observable<boolean> {
         if (Environment.notificationsReceived) {
-            this.router.navigate(['/tip-of-day'])
+            this.router.navigate(['tip-of-day'])
         } else {
             return true;
         }

@@ -11,7 +11,7 @@ The ActionBar is the NativeScript common abstraction over the Android ActionBar 
 http://docs.nativescript.org/ui/action-bar
 -->
 <ActionBar class="action-bar">
-    <StackLayout orientation="horizontal" ios:horizontalAlignment="left" android:horizontalAlignment="left">
+    <StackLayout orientation="horizontal" ios:horizontalAlignment="left" android:horizontalAlignment="left" (tap)="goBack()">
         <Label class="mdi icon back" [text]="'mdi-keyboard-arrow-left' | fonticon" horizontalAlignment="center"
             verticalAlignment="center"></Label>
         <Image src="res://store_logo" class="action-image"></Image>

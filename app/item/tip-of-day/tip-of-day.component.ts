@@ -3,6 +3,7 @@ import { FirebaseService } from '~/services/firebase.service';
 import { WebView, LoadEventData } from 'ui/web-view';
 import { isAndroid, isIOS } from 'ui/page';
 import { DatePipe } from '@angular/common';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 declare var android: any;
 declare var UIColor: any;
@@ -23,6 +24,7 @@ export class TipOfDayComponent implements AfterViewInit {
 	@ViewChild('myWebView') webView: ElementRef;
 	constructor(
 		private firebaseService: FirebaseService,
+		private router: RouterExtensions,
 		private datePipe: DatePipe
 	) { }
 
@@ -59,5 +61,9 @@ export class TipOfDayComponent implements AfterViewInit {
 				webView.ios.opaque=false;
 			}			
 		});
+	}
+
+	goBackHome(){
+		this.router.navigate(['items']);
 	}
 }

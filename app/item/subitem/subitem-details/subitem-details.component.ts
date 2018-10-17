@@ -9,6 +9,7 @@ import { EventData } from 'ui/page';
 import * as fs from "file-system";
 import { isIOS, isAndroid } from "platform";
 import { TabView } from 'ui/tab-view';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 declare var UIColor: any;
 declare var android: any;
@@ -31,6 +32,7 @@ export class SubitemDetailsComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private route: ActivatedRoute,
+		private routerExtension: RouterExtensions,
 		private itemService: ItemService,
 		private firebaseService: FirebaseService
 	) {
@@ -88,6 +90,10 @@ export class SubitemDetailsComponent implements OnInit, AfterViewInit {
 	onIndexChanged(args: EventData) {
 		let tabView = <TabView>args.object;
 		this.subItem = this.item.subitems.filter(item => item.id === (tabView.selectedIndex - 1))[0];
+	}
+
+	goBack(){
+		this.routerExtension.back();
 	}
 
 }
