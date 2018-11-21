@@ -15,7 +15,7 @@
          *  Handles new language addition initiated by native app
          */
         window.loadHtml = function (html) {
-            $("div.contentElement").append(html);
+            $("div.contentElement").empty().append(html);
             //document.getElementById("contentElement").innerHTML = html;
             oWebViewInterface.emit('htmlLoaded');
         };

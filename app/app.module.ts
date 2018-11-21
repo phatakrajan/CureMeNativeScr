@@ -10,7 +10,6 @@ import { ItemsComponent } from "~/item/items.component";
 import { FirebaseService } from '~/services/firebase.service';
 import { GpsLocationService } from '~/services/gpsLocation.service';
 import { NearestHelpComponent } from '~/item/nearest-help/nearest-help.component';
-import { HttpClientModule } from '@angular/common/http';
 import { DropDownModule } from "nativescript-drop-down/angular";
 import { SubitemDetailsComponent } from '~/item/subitem/subitem-details/subitem-details.component';
 import { TipOfDayComponent } from '~/item/tip-of-day/tip-of-day.component';
@@ -18,6 +17,12 @@ import * as platform from "platform";
 declare var GMSServices: any;
 
 declare var android: any;
+
+import { registerElement } from 'nativescript-angular/element-registry';
+// Register Custom Elements for Angular
+
+registerElement("Carousel", () => require("nativescript-carousel").Carousel);
+registerElement("CarouselItem", () => require("nativescript-carousel").CarouselItem);
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -37,7 +42,8 @@ import { DatePipe } from '@angular/common';
         NativeScriptHttpClientModule,
         DropDownModule,
         TNSFontIconModule.forRoot({
-            'mdi': 'material-design-icons.css'
+            'mdi': 'material-design-icons.css',
+            'fa': 'font-awesome.css'
         })    
     ],
     declarations: [

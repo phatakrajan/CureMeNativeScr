@@ -1,15 +1,20 @@
-<ActionBar class="action-bar">
-    <StackLayout orientation="horizontal" ios:horizontalAlignment="left" android:horizontalAlignment="left">
-        <Label class="mdi icon back" [text]="'mdi-keyboard-arrow-left' | fonticon" horizontalAlignment="center" verticalAlignment="center"></Label>
-        <Image src="res://store_logo" class="action-image"></Image>
-        <Label [text]="subItem.name" class="action-label"></Label>
-    </StackLayout>
+<ActionBar [title]="subItem.name" class="action-bar">
+    <NavigationButton android.systemIcon="ic_menu_back" text="" (tap)="goBack()"></NavigationButton>
 </ActionBar>
-<GridLayout class="page" rows="auto,*,40">
-    <DropDown #dd [items]="itemSource" [(ngModel)]="selectedIndex" (selectedIndexChanged)="onchange($event)" class="place-drop-down"
-        hint="Select Place" verticalAlignment="center" row="0" col="0"></DropDown>
-    <MapView #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [minZoom]="minZoom" [maxZoom]="maxZoom" [bearing]="bearing"
-        (mapReady)="onMapReady($event)" (markerSelect)="onMarkerSelect($event)" [tilt]="tilt" i-padding="50,50,50,50" [padding]="padding"
-        row="1" col="0">
-    </MapView> 
+<GridLayout class="page" rows="5*,4*,50">
+    <MapView #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [minZoom]="minZoom" [maxZoom]="maxZoom"
+        [bearing]="bearing" (mapReady)="onMapReady($event)" (markerSelect)="onMarkerSelect($event)" [tilt]="tilt"
+        i-padding="50,50,50,50" [padding]="padding" row="0" col="0">
+    </MapView>
+    <GridLayout *ngIf="placeDetails.length > 1" row="1">
+        <Carousel #carousel selectedPage="1" (pageChanged)="onPageChanged($event)" >
+            <ng-template ngFor let-subitem [ngForOf]="placeDetails">
+                <CarouselItem>
+                    <GridLayout>
+                        <Label text="subitem?.result?.name"></Label>
+                    </GridLayout>                    
+                </CarouselItem>
+            </ng-template>
+        </Carousel>
+    </GridLayout>
 </GridLayout>

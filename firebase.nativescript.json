@@ -1,16 +1,20 @@
 {
-    "using_ios": false,
+    "external_push_client_only": false,
+    "using_ios": true,
     "using_android": true,
     "firestore": true,
     "realtimedb": false,
+    "authentication": false,
     "remote_config": false,
     "messaging": true,
     "crashlytics": false,
     "crash_reporting": false,
     "storage": true,
+    "functions": false,
     "facebook_auth": false,
     "google_auth": false,
     "admob": true,
     "invites": false,
+    "dynamic_links": false,
     "ml_kit": false
 }

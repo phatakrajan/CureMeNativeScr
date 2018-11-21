@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Item } from '~/item/item';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { FirebaseService } from '~/services/firebase.service';
+import { isAndroid, isIOS } from 'tns-core-modules/ui/page/page';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { FirebaseService } from '~/services/firebase.service';
 })
 export class SubItemComponent implements OnInit, AfterViewInit {
     grpItem: Item;
+    isAndroid : boolean = isAndroid;
+    isIOS: boolean = isIOS;
 
     constructor(private itemService: ItemService,
                 private route: ActivatedRoute,

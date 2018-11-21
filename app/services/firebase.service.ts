@@ -3,9 +3,9 @@ import * as firebase from "nativescript-plugin-firebase";
 import { Message } from "nativescript-plugin-firebase";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import * as localStorage from 'application-settings';
-import * as appversion from "nativescript-appversion";
-import { RouterExtensions } from "nativescript-angular/router";
+import { Router } from "@angular/router";
+import { Environment } from "~/main";
+import { confirm } from "ui/dialogs";
 
 @Injectable()
 export class FirebaseService {
@@ -21,18 +21,18 @@ export class FirebaseService {
 
     constructor(
         private http: HttpClient,
-        private zone: NgZone,
-        private route: RouterExtensions
+        private route: Router
     ) {
         this.testing = true;
         this.androidBannerId = "ca-app-pub-7848962688204458/3817997068";
+        this.iosInterstitialId = "ca-app-pub-7848962688204458/4919824112";
     }
 
     init() {
-        setTimeout( () =>
+        setTimeout(() =>
             firebase.init({
                 iOSEmulatorFlush: true,
-                storageBucket: "gs://cureme-native.appspot.com",
+                showNotificationsWhenInForeground: true,
                 // Optionally pass in properties for database, authentication and cloud messaging,
                 // see their respective docs.
                 onMessageReceivedCallback: (message: Message) => {
@@ -45,10 +45,22 @@ export class FirebaseService {
 
                     console.dir(message);
 
-                    this.notificationReceived = true;
+                    Environment.notificationsReceived = true;
 
                     if (message.foreground === false) {
-                        this.route.navigate(['/tip-of-day'])
+                        this.route.navigate(['tip-of-day'])
+                    } else {
+                        let options = {
+                            title: "Notification Received",
+                            message: "Navigating to the Notification. Do you want to continue?",
+                            okButtonText: "View",
+                            cancelButtonText: "Cancel"
+                        };
+                        confirm(options).then((result: boolean) => {
+                            if (result) {
+                                this.route.navigate(['tip-of-day'])
+                            }
+                        });
                     }
                 },
 
@@ -59,19 +71,9 @@ export class FirebaseService {
                     }, (error) => {
                         console.log(error);
                     });
-                    // appversion.getVersionCode().then((v: string) => {
-                    //     if (localStorage.hasKey(v.toString()) === false){
-                    //         localStorage.setString(v.toString(), token);
-                    //         this.zone.run(() => {
-                    //             this.registerToken(token).subscribe((res) => {
-                    //                 console.log(res);
-                    //             });
-                    //         });   
-                    //     }
-                    // });                            
                 }
             }).then(
-                instance => {
+                () => {
                     console.log("firebase.init done");
                     setTimeout(() => {
                         firebase.subscribeToTopic("tipofday").then(() => {
@@ -80,7 +82,6 @@ export class FirebaseService {
                             console.log("Subscription error - " + error);
                         });
                     }, 300);
-
                 },
                 error => {
                     console.log(`firebase.init error: ${error}`);
@@ -93,12 +94,13 @@ export class FirebaseService {
             size: firebase.admob.AD_SIZE.SMART_BANNER, // see firebase.admob.AD_SIZE for all options
             margins: { // optional nr of device independent pixels from the top or bottom (don't set both)
                 bottom: 5,
-                top: 0
+                //top: 0
             },
             androidBannerId: this.androidBannerId,
             iosBannerId: this.iosInterstitialId,
             testing: this.testing, // when not running in production set this to true, Google doesn't like it any other way
             iosTestDeviceIds: [ //Android automatically adds the connected device as test device with testing:true, iOS does not
+                "0E73873B-1354-4DF9-B786-FBB5C03F8174"
             ]
         }).then(
             function () {

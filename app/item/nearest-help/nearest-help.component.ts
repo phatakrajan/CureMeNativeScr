@@ -23,25 +23,26 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
 })
 
 export class NearestHelpComponent implements OnInit, AfterViewInit {
-		
-	latitude =  0;
-    longitude = 0;
-    zoom = 15;
-    minZoom = 0;
-    maxZoom = 22;
-    bearing = 0;
-    tilt = 0;
+
+	latitude = 0;
+	longitude = 0;
+	zoom = 15;
+	minZoom = 0;
+	maxZoom = 22;
+	bearing = 0;
+	tilt = 0;
 	padding = [40, 40, 40, 40];
 
 	item: Item;
 	subItem: Item;
-	
+
 	places: PlaceList[];
 	placeDetails: PlaceDetails[] = [];
 	public selectedIndex = 0;
 	@ViewChild("mapView") mapView: ElementRef;
 	@ViewChild("dd") dd: ElementRef;
 	itemSource = new ValueList<string>();
+	entityType: string = "hospital"
 
 	constructor(
 		private firebaseService: FirebaseService,
@@ -56,57 +57,71 @@ export class NearestHelpComponent implements OnInit, AfterViewInit {
 		const subitemId = +this.route.snapshot.params["subitemid"];
 
 		this.item = this.itemService.getItem(id);
-		this.subItem = this.item.subitems.filter(item => item.id === subitemId)[0];	}
+		this.subItem = this.item.subitems.filter(item => item.id === subitemId)[0];
+
+		switch (subitemId.toString()) {
+			case "1":
+				this.entityType = 'pharmacy';
+			case "2":
+				this.entityType = 'doctors';
+			case "3":
+				this.entityType = 'hospital';
+			default:
+				this.entityType = 'hospital';
+		}
+		
+	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
 			this.firebaseService.showBanner();
 		}, 3000);
+
+		this.gpsLocationService.getGpsLocation()
+		.then((location) => {
+
+			this.latitude = location[0];
+			this.longitude = location[1];
+
+			this.nearesthelpService.getNearByPlaces(this.latitude, this.longitude, 5000, this.entityType)
+				.subscribe((res) => {
+					this.places = (<any>res).results;
+					let placeDetails: PlaceDetails[] = []
+					console.dir(this.places)
+					this.places.forEach((place) => {
+						this.nearesthelpService.getNearByPlaceDetails(place.reference).subscribe((details: PlaceDetails) => {
+							console.log(details.result.name);
+							placeDetails.push(details);
+
+							if (placeDetails.length === this.places.length){
+								this.placeDetails = placeDetails;
+							}
+						})
+					});
+				});
+		});
 	}
 
 	//Map events
 	onMapReady = (event) => {
 		console.log("Map Ready");
-		this.gpsLocationService.getGpsLocation()
-			.then((location) => {
-				
-				let map: MapView = this.mapView.nativeElement;
 
-				this.latitude = location[0];
-				this.longitude = location[1];
-				var marker = new Marker();
-				marker.position = Position.positionFromLatLng(this.latitude,this.longitude);
-				marker.title = "You are here !!";
-				map.addMarker(marker);
+		let map: MapView = this.mapView.nativeElement;
 
-				this.nearesthelpService.getNearByPlaces(this.latitude,this.longitude, 5000, 'hospital')
-					.subscribe((res) => {
-						this.places = (<any>res).results;
-						this.places.forEach((place) => {
+		var marker = new Marker();
+		marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+		marker.title = "You are here !!";
+		map.addMarker(marker);
 
-							this.nearesthelpService.getNearByPlaceDetails(place.reference).subscribe((details: PlaceDetails)=>{
-								this.placeDetails.push(details);
-								details.result.international_phone_number
-								this.itemSource.push({ value: details.result.id, display: details.result.name });
-
-								var markerPlace = new Marker();
-								markerPlace.position = Position.positionFromLatLng(place.geometry.location.lat,place.geometry.location.lng);
-								markerPlace.title = details.result.name;
-								markerPlace.color = "#00FF00";
-								markerPlace.userData = details;
-								markerPlace.infoWindowTemplate = "testWindow";
-								map.addMarker(markerPlace);
-							});
-
-							let dropDown: DropDown = this.dd.nativeElement;
-							dropDown.selectedIndex = 1 ;
-						});
-					})
-			},
-				(reason) => {
-					console.log(reason);
-				}
-			);
+		this.placeDetails.forEach((details) => {
+			var markerPlace = new Marker();
+			markerPlace.position = Position.positionFromLatLng(details.result.geometry.location.lat, details.result.geometry.location.lng);
+			markerPlace.title = details.result.name;
+			markerPlace.color = "#00FF00";
+			markerPlace.userData = details;
+			markerPlace.infoWindowTemplate = "testWindow";
+			map.addMarker(markerPlace);
+		});
 	};
 
 	incrementIndex() {
@@ -122,17 +137,21 @@ export class NearestHelpComponent implements OnInit, AfterViewInit {
 		this.selectedIndex = args.newIndex;
 
 		let place = this.placeDetails.filter(place => place.result.id === this.itemSource.getValue(args.newIndex))
-		this.latitude =  +place[0].result.geometry.location.lat;
-        this.longitude = +place[0].result.geometry.location.lng;
+		this.latitude = +place[0].result.geometry.location.lat;
+		this.longitude = +place[0].result.geometry.location.lng;
 	}
 
-	onMarkerWindowTapped(args){
+	onMarkerWindowTapped(args) {
 		let placeDetail: PlaceDetails = args.marker.userData;
 
 		this.selectedIndex = this.itemSource.getIndex(placeDetail.result.id)
 	}
 
-	onMarkerSelect(){
+	onMarkerSelect() {
 		console.log("onMarkerSelect");
+	}
+
+	onPageChanged(args) {
+
 	}
 }

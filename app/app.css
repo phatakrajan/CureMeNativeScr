@@ -15,6 +15,10 @@ refer to http://docs.nativescript.org/ui/theme.
     font-family: "Material Icons", "MaterialIcons-Regular";
 }
 
+.fa {
+    font-family: FontAwesome, fontawesome-webfont;
+}
+
 .page {
     background-image: url("~/images/background.jpg");
     background-repeat: no-repeat;
@@ -24,6 +28,7 @@ refer to http://docs.nativescript.org/ui/theme.
 
 ActionBar.action-bar {
     background-color: #1d6976;
+    color: #ffffff;
 }
 
 .action-image {
@@ -43,4 +48,12 @@ ActionBar.action-bar {
     color: #ffffff;
     font-size: 26;
     margin-left: -10;
+}
+
+ListView{
+    background-color: transparent;
+}
+
+.header {
+    color: #ffffff;
 }
