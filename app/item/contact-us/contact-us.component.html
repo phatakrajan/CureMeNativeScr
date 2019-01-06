@@ -1,0 +1,19 @@
+<ActionBar [title]="grpItem.name" class="action-bar">
+    <NavigationButton android.systemIcon="ic_menu_back" text="" (tap)="goBack()"></NavigationButton>
+</ActionBar>
+<GridLayout class="page" rows="*,50">
+    <GridLayout rows="auto,auto">
+        <Image [src]="grpItem.path" stretch="aspectFit" height=100 width=100 margin=10 horizontalAlignment="center"
+            class="p-y-10"></Image>
+        <!-- <Label [text]="grpItem.description" class="p-10" style="text-align:left;" textWrap="true" row="1"></Label> -->
+        <Label (tap)="onContactUs()" row="1" class="m-10" textWrap="true" >
+            <FormattedString>
+                <Span class="label_adv-theme" text="Feel free to"></Span>
+                <Span text=" "></Span>
+                <Span text="contact us" class="t-16 link"></Span>
+                <Span text=" "></Span>
+                <Span text="and book your appointment for Lifestyle Consultation with our doctors." class="t-16"></Span>
+            </FormattedString>
+        </Label>
+    </GridLayout>
+</GridLayout>

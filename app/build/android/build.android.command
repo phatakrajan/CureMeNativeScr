@@ -1,0 +1,1 @@
+tns build android --release --key-store-path cureme.jks --key-store-password 'Rp241181' --key-store-alias 'cureme' --key-store-alias-password 'Rp241181' --copy-to ./platforms/android/app/build/outputs/apk/release/cureme.apk

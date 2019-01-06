@@ -7,6 +7,7 @@ import { SubItemComponent } from "~/item/subitem/subitem.component";
 import { NearestHelpComponent } from "~/item/nearest-help/nearest-help.component";
 import { SubitemDetailsComponent } from "~/item/subitem/subitem-details/subitem-details.component";
 import { TipOfDayComponent } from "~/item/tip-of-day/tip-of-day.component";
+import { ContactUsComponent } from "~/item/contact-us/contact-us.component"
 import { ItemsGuard } from "~/item/items.guard";
 
 const routes: Routes = [
@@ -15,7 +16,8 @@ const routes: Routes = [
     { path: "item/:id", component: SubItemComponent },
     { path: "itemdetails/:id/:subitemid", component: SubitemDetailsComponent },
     { path: "nearesthelp/:id/:subitemid", component: NearestHelpComponent },
-    { path: "tip-of-day", component: TipOfDayComponent}
+    { path: "tip-of-day", component: TipOfDayComponent},
+    { path: "contact-us/:id/:subitemid", component: ContactUsComponent}
 ];
 
 @NgModule({

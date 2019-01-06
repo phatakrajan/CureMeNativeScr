@@ -1,14 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient,HttpParams } from '@angular/common/http';
-
+import * as GlobalSettings from "~/settings/globalSettings"
 
 @Injectable()
 export class NearestHelpService {
 
-    private PLACES_SEARCH_URL: string = "https://maps.googleapis.com/maps/api/place/search/json?";
-    private PLACES_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json?";
-    
-    private GOOGLE_PLACES_KEY: string = "AIzaSyDd87WZuqmN0Xlt2-v0ITHJ7ZF6Kzl2QU8";
+    private PLACES_SEARCH_URL: string = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+    private PLACES_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json?";    
     
     constructor(
         private http: HttpClient
@@ -23,7 +21,7 @@ export class NearestHelpService {
             .set('radius',radius.toString())
             .set('sensor', 'false')
             .set('types',types)
-            .set('key',this.GOOGLE_PLACES_KEY);
+            .set('key',GlobalSettings.GOOGLE_PLACES_KEY);
 
         return this.http.get(this.PLACES_SEARCH_URL,{params: params});
     }
@@ -32,7 +30,7 @@ export class NearestHelpService {
         const params: HttpParams = new HttpParams()
             .set('sensor', 'false')
             .set('reference',reference)
-            .set('key',this.GOOGLE_PLACES_KEY);
+            .set('key',GlobalSettings.GOOGLE_PLACES_KEY);
 
         return this.http.get(this.PLACES_DETAILS_URL,{params: params});
     }

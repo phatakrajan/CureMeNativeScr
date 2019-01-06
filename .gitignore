@@ -16,3 +16,4 @@ test-results.xml
 !app/www/*
 !app/www/**/*
 /app/App_Resources/Android/values/nativescript_google_maps_api.xml
+/app/settings/**

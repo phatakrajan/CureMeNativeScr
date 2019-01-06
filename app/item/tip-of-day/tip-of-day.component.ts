@@ -34,7 +34,7 @@ export class TipOfDayComponent implements AfterViewInit {
 
 		let webView: WebView = this.webView.nativeElement;
 		const today: Date = new Date();
-		//this.remoteFullPath = this.datePipe.transform(today, 'dd-MMM') + '.html';
+		this.remoteFullPath = this.datePipe.transform(today, 'dd-MMM') + '.html';
 		console.log(this.datePipe.transform(today, 'dd-MMM') + '.html');
 		setTimeout(() => {
 			this.firebaseService.getDownloadUrl(this.remoteFullPath)

@@ -4,12 +4,18 @@ import { NearestHelpService } from '~/item/nearest-help/nearest-help.service';
 import { FirebaseService } from '~/services/firebase.service';
 import { PlaceList } from '~/item/nearest-help/model/place';
 import { registerElement } from "nativescript-angular/element-registry";
-import { SelectedIndexChangedEventData, ValueList, DropDown } from "nativescript-drop-down";
-import { Marker, MapView, Position } from 'nativescript-google-maps-sdk';
+import { Marker, MapView, Position, Polyline } from 'nativescript-google-maps-sdk';
 import { PlaceDetails } from '~/item/nearest-help/model/placeDetails';
 import { ActivatedRoute } from '@angular/router';
 import { Item } from '~/item/item';
 import { ItemService } from '~/item/item.service';
+import { openUrl } from 'tns-core-modules/utils/utils';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { Location } from "nativescript-geolocation";
+import { Color } from 'tns-core-modules/color/color';
+import { MapsService } from '~/services/maps.service';
+import { DirectionDetails } from './model/directionDetails';
+import * as poly from '@mapbox/polyline';
 
 // Important - must register MapView plugin in order to use in Angular templates
 registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView);
@@ -41,14 +47,20 @@ export class NearestHelpComponent implements OnInit, AfterViewInit {
 	public selectedIndex = 0;
 	@ViewChild("mapView") mapView: ElementRef;
 	@ViewChild("dd") dd: ElementRef;
-	itemSource = new ValueList<string>();
-	entityType: string = "hospital"
+	// itemSource = new ValueList<string>();
+	entityType: string = "hospital";
+	selectedPlace: PlaceDetails;
+	phoneIcon: string = String.fromCharCode(0xf095) + '  Call';
+	directIcon: string = String.fromCharCode(0xf5eb) + ' Directions';
+	shareIcon: string = String.fromCharCode(0xf1e0) + ' Share';
 
 	constructor(
 		private firebaseService: FirebaseService,
 		private gpsLocationService: GpsLocationService,
 		private nearesthelpService: NearestHelpService,
+		private mapsService: MapsService,
 		private itemService: ItemService,
+		private router: RouterExtensions,
 		private route: ActivatedRoute
 	) { }
 
@@ -62,44 +74,26 @@ export class NearestHelpComponent implements OnInit, AfterViewInit {
 		switch (subitemId.toString()) {
 			case "1":
 				this.entityType = 'pharmacy';
+				break;
 			case "2":
-				this.entityType = 'doctors';
+				this.entityType = 'doctor';
+				break;
 			case "3":
 				this.entityType = 'hospital';
+				break;
 			default:
 				this.entityType = 'hospital';
+				break;
 		}
-		
+
+
+
 	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
 			this.firebaseService.showBanner();
 		}, 3000);
-
-		this.gpsLocationService.getGpsLocation()
-		.then((location) => {
-
-			this.latitude = location[0];
-			this.longitude = location[1];
-
-			this.nearesthelpService.getNearByPlaces(this.latitude, this.longitude, 5000, this.entityType)
-				.subscribe((res) => {
-					this.places = (<any>res).results;
-					let placeDetails: PlaceDetails[] = []
-					console.dir(this.places)
-					this.places.forEach((place) => {
-						this.nearesthelpService.getNearByPlaceDetails(place.reference).subscribe((details: PlaceDetails) => {
-							console.log(details.result.name);
-							placeDetails.push(details);
-
-							if (placeDetails.length === this.places.length){
-								this.placeDetails = placeDetails;
-							}
-						})
-					});
-				});
-		});
 	}
 
 	//Map events
@@ -108,50 +102,101 @@ export class NearestHelpComponent implements OnInit, AfterViewInit {
 
 		let map: MapView = this.mapView.nativeElement;
 
-		var marker = new Marker();
-		marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
-		marker.title = "You are here !!";
-		map.addMarker(marker);
+		this.gpsLocationService.getGpsLocation()
+			.then((location) => {
+				this.latitude = location[0];
+				this.longitude = location[1];
 
-		this.placeDetails.forEach((details) => {
-			var markerPlace = new Marker();
-			markerPlace.position = Position.positionFromLatLng(details.result.geometry.location.lat, details.result.geometry.location.lng);
-			markerPlace.title = details.result.name;
-			markerPlace.color = "#00FF00";
-			markerPlace.userData = details;
-			markerPlace.infoWindowTemplate = "testWindow";
-			map.addMarker(markerPlace);
-		});
+				var marker = new Marker();
+				marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+				marker.title = "You are here !!";
+				map.addMarker(marker);
+
+				this.nearesthelpService.getNearByPlaces(this.latitude, this.longitude, 5000, this.entityType)
+					.subscribe((res) => {
+						this.places = (<any>res).results;
+						this.places.forEach((place) => {
+							this.nearesthelpService.getNearByPlaceDetails(place.reference).subscribe((details: PlaceDetails) => {
+								this.placeDetails.push(details);
+								// this.itemSource.push({ value: details.result.id, display: details.result.name });
+
+								var markerPlace = new Marker();
+								markerPlace.position = Position.positionFromLatLng(details.result.geometry.location.lat, details.result.geometry.location.lng);
+								markerPlace.title = details.result.name;
+								markerPlace.color = "#00FF00";
+								markerPlace.userData = details;
+								markerPlace.infoWindowTemplate = "testWindow";
+								map.addMarker(markerPlace);
+							});
+						});
+					})
+			},
+				(reason) => {
+					console.log(reason);
+				}
+			);
 	};
 
-	incrementIndex() {
-		this.selectedIndex++;
+	// public onchange(args: SelectedIndexChangedEventData) {
+	// 	console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+	// 	this.selectedIndex = args.newIndex;
+
+	// 	let place = this.placeDetails.filter(place => place.result.id === this.itemSource.getValue(args.newIndex))
+	// 	this.latitude = +place[0].result.geometry.location.lat;
+	// 	this.longitude = +place[0].result.geometry.location.lng;
+	// }
+
+	onMarkerSelect(args) {
+		console.log(args.marker.userData);
+		this.selectedPlace = <PlaceDetails>args.marker.userData;
+
+		let map: MapView = this.mapView.nativeElement;
+		map.removeAllShapes();
+
+		const myLocation = new Location();
+		myLocation.latitude = +this.latitude
+		myLocation.longitude = +this.longitude;
+
+		const placeLocation = new Location();
+		placeLocation.latitude = +this.selectedPlace.result.geometry.location.lat;
+		placeLocation.longitude = +this.selectedPlace.result.geometry.location.lng;
+
+		let polyLine = new Polyline();
+		polyLine.color = new Color("#0000FF");
+		polyLine.width = 10;
+		this.mapsService.getDirections(myLocation, placeLocation).subscribe((directionRes: DirectionDetails) => {
+			if (directionRes.routes.length > 0) {
+				let points: any[] = poly.decode(directionRes.routes[0].overview_polyline.points);
+				points.forEach(point => {
+					var position = new Position();
+					position.latitude = point[0];
+					position.longitude = point[1];
+					polyLine.addPoint(position)
+				})
+				map.addPolyline(polyLine);
+			}
+		})
 	}
 
-	decrementIndex() {
-		this.selectedIndex--;
+	onOpenPhone(phone) {
+		const number = phone.replace(/\D+/g, '');
+		openUrl('tel://' + number);
 	}
 
-	public onchange(args: SelectedIndexChangedEventData) {
-		console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
-		this.selectedIndex = args.newIndex;
-
-		let place = this.placeDetails.filter(place => place.result.id === this.itemSource.getValue(args.newIndex))
-		this.latitude = +place[0].result.geometry.location.lat;
-		this.longitude = +place[0].result.geometry.location.lng;
+	goBack() {
+		this.router.back();
 	}
 
-	onMarkerWindowTapped(args) {
-		let placeDetail: PlaceDetails = args.marker.userData;
-
-		this.selectedIndex = this.itemSource.getIndex(placeDetail.result.id)
+	getOpenStatus(placeDetails: PlaceDetails): string {
+		if(placeDetails.result.opening_hours){
+			if (placeDetails.result.opening_hours.open_now) {
+				return "Open";
+			}
+		}		
+		return "Closed"
 	}
 
-	onMarkerSelect() {
-		console.log("onMarkerSelect");
-	}
-
-	onPageChanged(args) {
-
+	onCoordinateTapped() {
+		this.selectedPlace = null;
 	}
 }

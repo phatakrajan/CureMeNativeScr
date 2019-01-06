@@ -1,20 +1,20 @@
 <ActionBar [title]="subItem.name" class="action-bar">
     <NavigationButton android.systemIcon="ic_menu_back" text="" (tap)="goBack()"></NavigationButton>
 </ActionBar>
-<GridLayout class="page" rows="5*,4*,50">
-    <MapView #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [minZoom]="minZoom" [maxZoom]="maxZoom"
-        [bearing]="bearing" (mapReady)="onMapReady($event)" (markerSelect)="onMarkerSelect($event)" [tilt]="tilt"
-        i-padding="50,50,50,50" [padding]="padding" row="0" col="0">
-    </MapView>
-    <GridLayout *ngIf="placeDetails.length > 1" row="1">
-        <Carousel #carousel selectedPage="1" (pageChanged)="onPageChanged($event)" >
-            <ng-template ngFor let-subitem [ngForOf]="placeDetails">
-                <CarouselItem>
-                    <GridLayout>
-                        <Label text="subitem?.result?.name"></Label>
-                    </GridLayout>                    
-                </CarouselItem>
-            </ng-template>
-        </Carousel>
+<GridLayout class="page" rows="*,50">
+    <GridLayout row="0" rows="*,auto">
+        <MapView #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [minZoom]="minZoom" [maxZoom]="maxZoom"
+            [bearing]="bearing" (mapReady)="onMapReady($event)" (markerSelect)="onMarkerSelect($event)" [tilt]="tilt"
+            i-padding="50,50,50,50" [padding]="padding" (coordinateTapped)="onCoordinateTapped()">
+        </MapView>
+        <GridLayout row="1" *ngIf="selectedPlace" rows="auto,auto,auto,auto" class="p-x-10 p-y-10 cardStyle">
+            <Label [text]="selectedPlace?.result.name"class="infolabel-title m-y-5"></Label>
+            <Label [text]="selectedPlace?.result.formatted_address" textWrap="true" class="m-y-5 infolabel-text " row="1"></Label>
+            <Label [text]="getOpenStatus(selectedPlace)" row="2" class="closed m-y-5 infolabel-text" [ngClass]="{'open': getOpenStatus(selectedPlace) == 'Open'}"></Label>
+            <GridLayout columns="auto,auto" row="3" class="m-t-5 m-b-10">
+                <Button [text]="phoneIcon" class="fa btn btn-rounded-lg text-center call-btn" (tap)="onOpenPhone(selectedPlace.result.international_phone_number)" margin="0 0"></Button>
+                <!-- <Button [text]="shareIcon" col="1" class="fa btn btn-rounded-lg text-center" (tap)="onOpenPhone(selectedPlace.result.international_phone_number)"></Button> -->
+            </GridLayout>
+        </GridLayout>
     </GridLayout>
 </GridLayout>

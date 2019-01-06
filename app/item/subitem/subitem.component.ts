@@ -40,6 +40,8 @@ export class SubItemComponent implements OnInit, AfterViewInit {
                 this.router.navigate(['itemdetails',itemId, subItemId]);
         } else if (itemId === ItemName.NEAREST_HELP){
             this.router.navigate(['nearesthelp',itemId, subItemId]);
+        } else if (itemId === ItemName.CONTACT_DOCTOR) {
+            this.router.navigate(['contact-us',itemId, subItemId]);
         }
         
     }

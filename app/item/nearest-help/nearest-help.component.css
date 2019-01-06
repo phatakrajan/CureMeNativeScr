@@ -16,6 +16,38 @@
     color: #6495ed;
 }
 
-.phone {
-    font-size: 26;
+icon-lg {
+    font-size: 24;
+}
+
+.infolabel-title{
+    font-size: 20;
+    font-weight: 700;
+}
+
+.infolabel-text {
+    font-size: 16;
+}
+
+Label {
+    font-family: "Roboto-Regular", "Roboto Regular";
+}
+
+.cardStyle {
+    background-color: #3489db;
+    color: #fff;
+}
+
+.call-btn {
+    background-color: #00ff00;
+    color: #ffffff;
+}
+
+.closed {
+    font-weight: 700;
+    color: #ff0000;
+}
+
+.open{
+    color: #00ff00;
 }
