@@ -63,7 +63,7 @@ export class TipOfDayComponent implements AfterViewInit {
 		});
 	}
 
-	goBackHome(){
+	goBack(){
 		this.router.navigate(['items']);
 	}
 }

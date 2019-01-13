@@ -10,6 +10,7 @@ android {
     generatedDensities = []
     multiDexEnabled true
     applicationId = "com.nativescript.cureme"  
+    targetSdkVersion 26
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

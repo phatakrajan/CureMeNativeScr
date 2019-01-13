@@ -1,8 +1,8 @@
 <ActionBar [title]="title" class="action-bar">
     <NavigationButton android.systemIcon="ic_menu_back" text="" (tap)="goBack()"></NavigationButton>
 </ActionBar>
-<GridLayout rows="*,40" class="page">
-    <Carousel #carousel [selectedPage]="selectedIndex" (pageChanged)="onPageChanged($event)">
+<GridLayout rows="*,50" class="page">
+    <Carousel #carousel [selectedPage]="selectedIndex" (pageChanged)="onPageChanged($event)" indicatorColor="#1d6976" indicatorColorUnselected="#ffffff">
         <ng-template ngFor let-subitem [ngForOf]="item.subitems">
             <CarouselItem>
                 <GridView rows="auto,*">

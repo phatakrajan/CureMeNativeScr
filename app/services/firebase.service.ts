@@ -23,7 +23,7 @@ export class FirebaseService {
         private http: HttpClient,
         private route: Router
     ) {
-        this.testing = true;
+        this.testing = false;
         this.androidBannerId = "ca-app-pub-7848962688204458/3817997068";
         this.iosInterstitialId = "ca-app-pub-7848962688204458/4919824112";
     }
@@ -38,8 +38,6 @@ export class FirebaseService {
                 onMessageReceivedCallback: (message: Message) => {
                     console.log(`Title: ${message.title}`);
                     console.log(`Body: ${message.body}`);
-                    // if your server passed a custom property called 'foo', then do this:
-                    console.log(`Value of 'foo': ${message.data.foo}`);
 
                     console.log(`Value of 'foreground': ${message.foreground}`);
 
@@ -51,8 +49,8 @@ export class FirebaseService {
                         this.route.navigate(['tip-of-day'])
                     } else {
                         let options = {
-                            title: "Notification Received",
-                            message: "Navigating to the Notification. Do you want to continue?",
+                            title: "Tip of the Day",
+                            message: "Navigating to the tip. Do you want to continue?",
                             okButtonText: "View",
                             cancelButtonText: "Cancel"
                         };
